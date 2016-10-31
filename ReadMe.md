@@ -1,5 +1,4 @@
 #Lines
-======
 
 Simple [lines](https://en.wikipedia.org/wiki/Color_Lines) game
 

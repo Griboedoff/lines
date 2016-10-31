@@ -3,6 +3,7 @@ import sys
 import config
 from Gui.GuiField import GuiField
 from Model.game_field import GameField
+from Model.ball_generator import BallGenerator
 
 try:
     from PyQt5 import QtGui, QtCore, QtWidgets
@@ -15,7 +16,8 @@ except Exception as e:
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     field = GameField()
-    field.add_balls(10)
+    BallGenerator.generate_balls(field, 10)
+
     ex = GuiField(field)
 
     sys.exit(app.exec_())

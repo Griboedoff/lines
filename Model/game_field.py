@@ -1,4 +1,3 @@
-from Model.ball_generator import BallGenerator
 from Model.cell import Cell
 
 
@@ -6,6 +5,7 @@ class GameField:
     def __init__(self):
         self._field = [[Cell() for _ in range(9)] for _ in range(9)]
         self._empty_cells_count = 9 * 9
+        self.selected_cell = []
 
     # region props
     @property
@@ -32,6 +32,14 @@ class GameField:
     def empty_cells_count(self):
         return self._empty_cells_count
 
+    @property
+    def has_selected_cell(self):
+        return bool(self.selected_cell)
+
+    # @property
+    # def cells_with_balls(self):
+    #     return filter(lambda x: x.has_ball, (line for line in self._field))
+
     # endregion
 
     def __getitem__(self, item):
@@ -54,6 +62,3 @@ class GameField:
                     cell.ball = ball
                     self._empty_cells_count -= 1
                     break
-
-    def add_balls(self, count):
-        BallGenerator.generate_balls(self, count)
