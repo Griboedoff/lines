@@ -6,7 +6,7 @@ QT_NOT_FOUND = 100
 
 CELL_SIZE = 60
 BALL_SIZE = 48
-BALL_SHIFT = (CELL_SIZE - BALL_SIZE) //2
+BALL_SHIFT = (CELL_SIZE - BALL_SIZE) // 2
 try:
     from PyQt5.QtGui import QColor
 except Exception as e:

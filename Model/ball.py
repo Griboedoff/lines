@@ -1,5 +1,7 @@
 import enum
+
 import config
+
 
 class BallColor(enum.Enum):
     GREEN = 0

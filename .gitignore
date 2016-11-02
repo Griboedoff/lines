@@ -5,8 +5,8 @@
 .idea/workspace.xml
 .idea/tasks.xml
 __pycache__/*
-Gui/__pycache__/*
-Model/__pycache__/*
+/Gui/__pycache__/*
+/Model/__pycache__/*
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
