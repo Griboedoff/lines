@@ -21,7 +21,6 @@ def initialize_game():
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    initialize_game()
 
     game_field = initialize_game()
     ex = GuiField(game_field)

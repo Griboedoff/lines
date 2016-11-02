@@ -3,9 +3,10 @@ from Model.lines_types import LinesTypes
 
 
 class GameField:
-    def __init__(self):
-        self._field = [[Cell() for _ in range(9)] for _ in range(9)]
-        self._empty_cells_count = 9 * 9
+    def __init__(self, field_size=9):
+        self._field = [[Cell() for _ in range(field_size)] for _ in
+                       range(field_size)]
+        self._empty_cells_count = field_size * field_size
         self.selected_cell = []
 
     def __setitem__(self, key, value):
@@ -51,14 +52,15 @@ class GameField:
     # endregion
 
     def add_ball_to_nth_empty_cell(self, n, ball):
+        с = 0
         for line in self._field:
             for cell in line:
                 if not cell.has_ball:
-                    n -= 1
-                if n == 0:
+                    с += 1
+                if n == с:
                     cell.ball = ball
                     self._empty_cells_count -= 1
-                    break
+                    return
 
     def check_completed_combination(self, x, y):
         completed_line_types = []
@@ -77,3 +79,44 @@ class GameField:
             if c >= 5:
                 completed_line_types.append(line_type)
         return completed_line_types
+
+    def try_perform_move(self):
+        finish = self.selected_cell.pop()
+        start = self.selected_cell.pop()
+        if not self[start].has_ball or start == finish or self[finish].has_ball:
+            return False
+        is_correct_move = self.is_correct_move(start, finish)
+        if is_correct_move:
+            self[finish] = self[start]
+            self[start] = Cell()
+        return is_correct_move
+
+    def is_correct_move(self, start, finish):
+        visited = {start}
+        st = [start]
+        d_coordinates = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+        while st:
+            current = st.pop(0)
+            if current == finish:
+                return True
+            visited.add(current)
+            for d_c in d_coordinates:
+                neighbour = (current[0] + d_c[0], current[1] + d_c[1])
+                if self.is_in_field(*neighbour):
+                    has_ball = not self[neighbour].has_ball
+                    if has_ball and neighbour not in visited:
+                        st.append(neighbour)
+        return False
+
+    def is_in_field(self, x, y):
+        return 0 <= x < self.width and 0 <= y < self.height
+
+
+
+        # todo tests
+        # todo удалять самую длинную
+        # todo очки, таблица рекордов(11 + 1), имя в конце
+        # todo подсказки (что появится слдедующим, подсказка хода(3/4 очков))
+        # todo радужные шарики
+        # todo пакетный режим
+        # todo nxn поле, шариков (n // 2) + 1

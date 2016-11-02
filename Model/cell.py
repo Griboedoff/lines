@@ -4,7 +4,7 @@ class Cell:
 
     @property
     def has_ball(self):
-        return self.ball != None
+        return self.ball
 
     @property
     def ball_color(self):
