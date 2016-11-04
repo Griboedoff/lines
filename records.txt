@@ -1,0 +1,1 @@
+{"Ringo Starr":100,"Paul McCartney":200,"John Lennon":150,"George Harrison":140}
