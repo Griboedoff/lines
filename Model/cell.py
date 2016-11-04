@@ -9,4 +9,4 @@ class Cell:
     @property
     def ball_color(self):
         if self.has_ball:
-            return self.ball.get_color
+            return self.ball.color

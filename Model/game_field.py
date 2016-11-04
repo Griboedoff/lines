@@ -4,10 +4,10 @@ from Model.lines_types import LinesTypes
 
 class GameField:
     def __init__(self, field_size=9):
+
         self._field = [[Cell() for _ in range(field_size)] for _ in
                        range(field_size)]
         self._empty_cells_count = field_size * field_size
-        self.selected_cell = []
 
     def __setitem__(self, key, value):
         x, y = key
@@ -45,10 +45,6 @@ class GameField:
     def empty_cells_count(self):
         return self._empty_cells_count
 
-    @property
-    def has_selected_cell(self):
-        return bool(self.selected_cell)
-
     # endregion
 
     def add_ball_to_nth_empty_cell(self, n, ball):
@@ -62,27 +58,39 @@ class GameField:
                     self._empty_cells_count -= 1
                     return
 
-    def check_completed_combination(self, x, y):
+    def find_lines_length(self, x, y):
         completed_line_types = []
-        color = self[x, y].ball_color
+        color = self[(x, y)].ball_color
         for line_type in LinesTypes:
-            c = 0
-            for d_v in LinesTypes.get_delta_vectors(line_type):
-                i = 1
-                current_cell = self[x + d_v[0] * i, y + d_v[1] * i]
-                while current_cell.has_ball:
-                    if current_cell.ball_color == color:
-                        c += 1
-                    else:
-                        break
-                    i += 1
-            if c >= 5:
-                completed_line_types.append(line_type)
+            line = self._count_same_color_balls_in_line(line_type, x, y, color)
+            if len(line) >= (self.width // 2 + 1):
+                completed_line_types.append((line_type, line))
         return completed_line_types
 
-    def try_perform_move(self):
-        finish = self.selected_cell.pop()
-        start = self.selected_cell.pop()
+    def _count_same_color_balls_in_line(self, line_type, x, y, color):
+        line = [(x, y)]
+        for d_v in LinesTypes.get_delta_vectors(line_type):
+            i = 1
+            current_cell_coordinated = (x + d_v[0] * i, y + d_v[1] * i)
+            while (self.is_in_field(*current_cell_coordinated) and
+                       self[current_cell_coordinated].has_ball):
+                if self[current_cell_coordinated].ball_color == color:
+                    line.append(current_cell_coordinated)
+                else:
+                    break
+                i += 1
+                current_cell_coordinated = (x + d_v[0] * i, y + d_v[1] * i)
+        return line
+
+    def try_remove_lines(self, lines):
+        if lines:
+            longest_line = max(lines, key=lambda x: len(x[1]))
+            for coordinates in longest_line[1]:
+                self._empty_cells_count -= 1
+                self[coordinates] = Cell()
+            return len(longest_line[1])
+
+    def try_perform_move(self, start, finish):
         if not self[start].has_ball or start == finish or self[finish].has_ball:
             return False
         is_correct_move = self.is_correct_move(start, finish)
@@ -111,12 +119,10 @@ class GameField:
     def is_in_field(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height
 
-
-
+        # todo handle full field
         # todo tests
-        # todo удалять самую длинную
         # todo очки, таблица рекордов(11 + 1), имя в конце
-        # todo подсказки (что появится слдедующим, подсказка хода(3/4 очков))
+        # todo подсказки (что появится следующим, подсказка хода(3/4 очков))
         # todo радужные шарики
         # todo пакетный режим
         # todo nxn поле, шариков (n // 2) + 1

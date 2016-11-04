@@ -8,12 +8,10 @@ class LinesTypes(enum.Enum):
     SECONDARY_DIAGONAL = 3
 
     @staticmethod
-    def get_delta_vectors(type):
-        if type == LinesTypes.HORIZONTAL:
-            return [(1, 0), (-1, 0)]
-        elif type == LinesTypes.VERTICAL:
-            return [(0, 1), (0, -1)]
-        elif type == LinesTypes.MAIN_DIAGONAL:
-            return [(1, 1), (-1, -1)]
-        elif type == LinesTypes.SECONDARY_DIAGONAL:
-            return [(-1, 1), (1, -1)]
+    def get_delta_vectors(line_type):
+        line_type_match_dict = {
+            LinesTypes.HORIZONTAL: [(1, 0), (-1, 0)],
+            LinesTypes.VERTICAL: [(0, 1), (0, -1)],
+            LinesTypes.MAIN_DIAGONAL: [(1, 1), (-1, -1)],
+            LinesTypes.SECONDARY_DIAGONAL: [(-1, 1), (1, -1)]}
+        return line_type_match_dict[line_type]

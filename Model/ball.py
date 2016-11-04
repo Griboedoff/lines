@@ -13,21 +13,16 @@ class BallColor(enum.Enum):
     BROWN = 6
 
     @staticmethod
-    def get_color(type):
-        if type == BallColor.GREEN:
-            return config.BALL_COLOR_GREEN
-        if type == BallColor.RED:
-            return config.BALL_COLOR_RED
-        if type == BallColor.BLUE:
-            return config.BALL_COLOR_BLUE
-        if type == BallColor.CYAN:
-            return config.BALL_COLOR_CYAN
-        if type == BallColor.YELLOW:
-            return config.BALL_COLOR_YELLOW
-        if type == BallColor.MAGENTA:
-            return config.BALL_COLOR_MAGENTA
-        if type == BallColor.BROWN:
-            return config.BALL_COLOR_BROWN
+    def get_color(ball_color):
+        ball_color_match_dict = {
+            BallColor.GREEN: config.BALL_COLOR_GREEN,
+            BallColor.RED: config.BALL_COLOR_RED,
+            BallColor.BLUE: config.BALL_COLOR_BLUE,
+            BallColor.CYAN: config.BALL_COLOR_CYAN,
+            BallColor.YELLOW: config.BALL_COLOR_YELLOW,
+            BallColor.MAGENTA: config.BALL_COLOR_MAGENTA,
+            BallColor.BROWN: config.BALL_COLOR_BROWN}
+        return ball_color_match_dict[ball_color]
 
 
 class Ball:

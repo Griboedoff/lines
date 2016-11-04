@@ -2,6 +2,7 @@ import sys
 
 import config
 from Gui.GuiField import GuiField
+from Gui.controller import Controller
 from Model.ball_generator import BallGenerator
 from Model.game_field import GameField
 
@@ -15,7 +16,7 @@ except Exception as e:
 
 def initialize_game():
     game_field = GameField()
-    BallGenerator.generate_balls(game_field, 10)
+    BallGenerator.place_balls(game_field, BallGenerator.generate_balls(10))
     return game_field
 
 
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     game_field = initialize_game()
-    ex = GuiField(game_field)
+    controller = Controller(game_field)
+    ex = GuiField(game_field , controller)
 
     sys.exit(app.exec_())

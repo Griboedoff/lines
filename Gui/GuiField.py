@@ -1,7 +1,6 @@
 import sys
 
 from config import CELL_SIZE, CELL_COLOR, BALL_SIZE, BALL_SHIFT, QT_NOT_FOUND
-from Model.ball_generator import BallGenerator
 
 try:
     from PyQt5 import QtGui, QtCore, QtWidgets
@@ -12,10 +11,10 @@ except Exception as e:
 
 
 class GuiField(QtWidgets.QWidget):
-    def __init__(self, field, parent=None):
+    def __init__(self, field, controller):
         super().__init__()
+        self._controller = controller
         self.field = field
-        self._parent = parent
         self.initUI()
 
     def initUI(self):
@@ -23,12 +22,7 @@ class GuiField(QtWidgets.QWidget):
         self.show()
 
     def mousePressEvent(self, QMouseEvent):
-        pos = QMouseEvent.pos()
-        self.field.selected_cell.append((pos.x() // CELL_SIZE,
-                                         pos.y() // CELL_SIZE))
-        if len(self.field.selected_cell) == 2:
-            if self.field.try_perform_move():
-                BallGenerator.generate_balls(self.field, 3)
+        self._controller.handle_mouse_click(QMouseEvent.pos())
         self.repaint()
 
     def paintEvent(self, event):
@@ -40,7 +34,7 @@ class GuiField(QtWidgets.QWidget):
     def _draw_field(self, painter):
         self._draw_cells(painter)
 
-        if self.field.has_selected_cell:
+        if self._controller.has_selected_cell:
             self._draw_highlighting(painter)
 
         self._draw_balls(painter)
@@ -65,9 +59,8 @@ class GuiField(QtWidgets.QWidget):
 
     def _draw_highlighting(self, painter):
         painter.setPen(QtGui.QColor(255, 255, 0))
-        cell = self.field.selected_cell[0]
-        self._draw_cell_size(painter.drawRect,
-                             cell[0], cell[1])
+        cell = self._controller.selected_cell
+        self._draw_cell_size(painter.drawRect, cell[0], cell[1])
         painter.setPen(QtGui.QColor(0, 0, 0))
 
     def _draw_cell(self, painter, x, y):
