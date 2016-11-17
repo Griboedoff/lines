@@ -1,5 +1,5 @@
 class Cell:
-    def __init__(self, ball = None):
+    def __init__(self, ball=None):
         self.ball = ball
 
     @property
@@ -7,6 +7,6 @@ class Cell:
         return self.ball
 
     @property
-    def ball_color(self):
+    def ball_colors(self):
         if self.has_ball:
-            return self.ball.color
+            return self.ball.colors

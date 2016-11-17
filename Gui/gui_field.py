@@ -1,10 +1,9 @@
 import sys
 
-from Gui.gui_controller import Controller
+from Gui.gui_controller import GuiController
 from Model.ball import Ball
 from Model.game_field import GameField
-from config import CELL_SIZE, CELL_COLOR, BALL_SIZE, BALL_SHIFT, QT_NOT_FOUND, \
-    SCORE_BOARD_SIZE
+from config import BALL_SHIFT, BALL_SIZE, CELL_COLOR, CELL_SIZE, QT_NOT_FOUND, SCORE_BOARD_SIZE
 
 try:
     from PyQt5 import QtGui, QtWidgets, QtCore
@@ -15,11 +14,11 @@ except Exception as e:
 
 
 class GuiField(QtWidgets.QWidget):
-    def __init__(self, field: GameField, controller: Controller):
+    def __init__(self, field: GameField, controller: GuiController):
         super().__init__()
         self._controller = controller
         self.field = field
-        self.right_panel_shift = self.field.width * CELL_SIZE+ 5
+        self.right_panel_shift = self.field.width * CELL_SIZE + 5
         self.initUI()
         self.resize(self.field.width * CELL_SIZE + SCORE_BOARD_SIZE,
                     self.field.height * CELL_SIZE)
@@ -35,8 +34,17 @@ class GuiField(QtWidgets.QWidget):
     def paintEvent(self, event):
         painter = QtGui.QPainter()
         painter.begin(self)
-        self._draw_field(painter)
+        if self._controller.is_over:
+            self._draw_game_end(painter)
+            self.close()
+        else:
+            self._draw_field(painter)
         painter.end()
+
+    def _draw_game_end(self, painter):
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText("The Game Over")
+        msgBox.exec_()
 
     def _draw_field(self, painter):
         self._draw_cells(painter)
@@ -48,7 +56,7 @@ class GuiField(QtWidgets.QWidget):
 
         self._draw_score_board(painter)
 
-        if self._controller.need_to_draw_simple_hint:
+        if self._controller.hint_mode:
             self._draw_simple_hint(painter)
 
     def _draw_simple_hint(self, painter):
@@ -56,12 +64,9 @@ class GuiField(QtWidgets.QWidget):
         for ball in self._controller.next_balls_to_add:
             x_shift = self.right_panel_shift + i * CELL_SIZE
             y_shift = (self.field.height - 1) * CELL_SIZE
-            painter.setBrush(CELL_COLOR)
-            painter.drawRect(x_shift, y_shift, CELL_SIZE, CELL_SIZE)
-            painter.setBrush(ball.color)
-            painter.drawEllipse(x_shift + BALL_SHIFT, y_shift + BALL_SHIFT,
-                                BALL_SIZE, BALL_SIZE)
-            i+=1
+            self._draw_cell(painter, x_shift, y_shift)
+            self._draw_ball(painter, ball, x_shift, y_shift)
+            i += 1
 
     def _draw_score_board(self, painter: QtGui.QPainter):
         painter.drawText(self.right_panel_shift, 0,
@@ -71,32 +76,32 @@ class GuiField(QtWidgets.QWidget):
     def _draw_cells(self, painter: QtGui.QPainter):
         for x in self.field.width_r:
             for y in self.field.height_r:
-                self._draw_cell(painter, x, y)
+                self._draw_cell(painter, x * CELL_SIZE, y * CELL_SIZE)
 
     def _draw_balls(self, painter: QtGui.QPainter):
         for x in self.field.width_r:
             for y in self.field.height_r:
                 cell = self.field[(x, y)]
                 if cell.has_ball:
-                    self._draw_ball(painter, cell.ball, x, y)
+                    self._draw_ball(painter, cell.ball, x * CELL_SIZE, y * CELL_SIZE)
 
-    def _draw_ball(self, painter, ball: Ball, x, y):
-        painter.setBrush(ball.color)
-        self._draw_cell_size(painter.drawEllipse, x, y,
-                             BALL_SIZE, BALL_SHIFT)
+    @staticmethod
+    def _draw_ball(painter, ball: Ball, x, y):
+        outer_x = x + BALL_SHIFT
+        outer_y = y + BALL_SHIFT
+        if not ball.has_two_colors:
+            painter.setBrush(ball.colors[0])
+            painter.drawEllipse(outer_x, outer_y,
+                                BALL_SIZE, BALL_SIZE)
 
     def _draw_highlighting(self, painter: QtGui.QPainter):
         painter.setPen(QtGui.QColor(255, 255, 0))
         cell = self._controller.selected_cell
-        self._draw_cell_size(painter.drawRect, cell[0], cell[1])
+        self._draw_cell(painter, cell[0] * CELL_SIZE, cell[1] * CELL_SIZE)
         painter.setPen(QtGui.QColor(0, 0, 0))
 
-    def _draw_cell(self, painter: QtGui.QPainter, x, y):
-        painter.setBrush(CELL_COLOR)
-        self._draw_cell_size(painter.drawRect, x, y)
-
     @staticmethod
-    def _draw_cell_size(painter_func, x, y, obj_size=CELL_SIZE, offset=0):
-        painter_func(x * CELL_SIZE + offset,
-                     y * CELL_SIZE + offset,
-                     obj_size, obj_size)
+    def _draw_cell(painter: QtGui.QPainter, x, y):
+        painter.setBrush(CELL_COLOR)
+        painter.drawRect(x, y,
+                         CELL_SIZE, CELL_SIZE)

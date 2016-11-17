@@ -1,8 +1,9 @@
+#
 import argparse
 import sys
 
 import config
-from Gui.gui_controller import Controller
+from Gui.gui_controller import GuiController
 from Gui.gui_field import GuiField
 from Model.ball_generator import BallGenerator
 from Model.game_field import GameField
@@ -11,13 +12,12 @@ from Model.score_table import ScoreTable
 try:
     from PyQt5 import QtGui, QtCore, QtWidgets
 except Exception as e:
-    print('PyQt5 not found: "{}"'.format(e),
-          file=sys.stderr)
+    sys.stderr.write('PyQt5 not found: "{}"'.format(e).encode())
     sys.exit(config.QT_NOT_FOUND)
 
 
 def create_parser():
-    """Разбор аргументов запуска"""
+    """Argument parse"""
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--records', type=str, default='records.txt',
                         help='Path to records table')
@@ -43,8 +43,8 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
     game_field = initialize_game(parser.size)
-    controller = Controller(game_field,
-                            ScoreTable.load_from(parser.records, parser.mode))
+    controller = GuiController(game_field,
+                               ScoreTable.load_from(parser.records, parser.mode))
     ex = GuiField(game_field, controller)
 
     sys.exit(app.exec_())

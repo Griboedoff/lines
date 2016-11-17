@@ -13,7 +13,7 @@ class BallColor(enum.Enum):
     BROWN = 6
 
     @staticmethod
-    def get_color(ball_color):
+    def get_qt_color(ball_color):
         ball_color_match_dict = {
             BallColor.GREEN: config.BALL_COLOR_GREEN,
             BallColor.RED: config.BALL_COLOR_RED,
@@ -27,8 +27,12 @@ class BallColor(enum.Enum):
 
 class Ball:
     def __init__(self, color):
-        self._color = color
+        self._colors = {color}
 
     @property
-    def color(self):
-        return BallColor.get_color(self._color)
+    def has_two_colors(self):
+        return len(self._colors) == 2
+
+    @property
+    def colors(self):
+        return [BallColor.get_qt_color(color) for color in self._colors]

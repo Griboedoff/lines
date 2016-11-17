@@ -60,14 +60,13 @@ class GameField:
 
     def find_lines_length(self, coordinates: tuple):
         completed_line_types = []
-        color = self[coordinates].ball_color
-
-        for line_type in LinesTypes:
-            line = self._count_same_color_balls_in_line(line_type,
-                                                        coordinates,
-                                                        color)
-            if len(line) >= (self.width // 2 + 1):
-                completed_line_types.append((line_type, line))
+        for color in self[coordinates].ball_colors:
+            for line_type in LinesTypes:
+                line = self._count_same_color_balls_in_line(line_type,
+                                                            coordinates,
+                                                            color)
+                if len(line) >= (self.width // 2 + 1):
+                    completed_line_types.append((line_type, line))
 
         return completed_line_types
 
@@ -79,8 +78,8 @@ class GameField:
             current_cell_coordinated = (coordinates[0] + d_v[0] * i,
                                         coordinates[1] + d_v[1] * i)
             while (self.is_in_field(*current_cell_coordinated) and
-                       self[current_cell_coordinated].has_ball):
-                if self[current_cell_coordinated].ball_color != color:
+                    self[current_cell_coordinated].has_ball):
+                if color not in self[current_cell_coordinated].ball_colors:
                     break
                 line.append(current_cell_coordinated)
                 i += 1

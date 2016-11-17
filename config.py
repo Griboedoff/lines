@@ -12,8 +12,7 @@ SCORE_BOARD_SIZE = 3 * CELL_SIZE + 5
 try:
     from PyQt5.QtGui import QColor
 except Exception as e:
-    print('PyQt5 not found: "{}"'.format(e),
-          file=sys.stderr)
+    sys.stderr.write('PyQt5 not found: "{}"'.format(e).encode())
     sys.exit(QT_NOT_FOUND)
 
 # region Colors
