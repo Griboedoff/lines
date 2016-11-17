@@ -24,15 +24,27 @@ class BallColor(enum.Enum):
             BallColor.BROWN: config.BALL_COLOR_BROWN}
         return ball_color_match_dict[ball_color]
 
+    @staticmethod
+    def get_char_repr(ball_color):
+        ball_color_match_dict = {
+            BallColor.GREEN: config.BALL_CHAR_GREEN,
+            BallColor.RED: config.BALL_CHAR_RED,
+            BallColor.BLUE: config.BALL_CHAR_BLUE,
+            BallColor.CYAN: config.BALL_CHAR_CYAN,
+            BallColor.YELLOW: config.BALL_CHAR_YELLOW,
+            BallColor.MAGENTA: config.BALL_CHAR_MAGENTA,
+            BallColor.BROWN: config.BALL_CHAR_BROWN}
+        return ball_color_match_dict[ball_color]
+
 
 class Ball:
     def __init__(self, color):
         self._colors = {color}
 
     @property
-    def has_two_colors(self):
+    def is_multicolor(self):
         return len(self._colors) == 2
 
     @property
     def colors(self):
-        return [BallColor.get_qt_color(color) for color in self._colors]
+        return list(self._colors)

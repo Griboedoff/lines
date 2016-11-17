@@ -1,9 +1,10 @@
 import sys
 
 from Gui.gui_controller import GuiController
-from Model.ball import Ball
+from Model.ball import Ball, BallColor
 from Model.game_field import GameField
-from config import BALL_SHIFT, BALL_SIZE, CELL_COLOR, CELL_SIZE, QT_NOT_FOUND, SCORE_BOARD_SIZE
+from config import BALL_SHIFT, BALL_SIZE, CELL_COLOR, CELL_SIZE, QT_NOT_FOUND, \
+    SCORE_BOARD_SIZE
 
 try:
     from PyQt5 import QtGui, QtWidgets, QtCore
@@ -56,7 +57,7 @@ class GuiField(QtWidgets.QWidget):
 
         self._draw_score_board(painter)
 
-        if self._controller.hint_mode:
+        if self._controller.show_simple_hint:
             self._draw_simple_hint(painter)
 
     def _draw_simple_hint(self, painter):
@@ -83,14 +84,15 @@ class GuiField(QtWidgets.QWidget):
             for y in self.field.height_r:
                 cell = self.field[(x, y)]
                 if cell.has_ball:
-                    self._draw_ball(painter, cell.ball, x * CELL_SIZE, y * CELL_SIZE)
+                    self._draw_ball(painter, cell.ball,
+                                    x * CELL_SIZE, y * CELL_SIZE)
 
     @staticmethod
     def _draw_ball(painter, ball: Ball, x, y):
         outer_x = x + BALL_SHIFT
         outer_y = y + BALL_SHIFT
-        if not ball.has_two_colors:
-            painter.setBrush(ball.colors[0])
+        if not ball.is_multicolor:
+            painter.setBrush(BallColor.get_qt_color(ball.colors[0]))
             painter.drawEllipse(outer_x, outer_y,
                                 BALL_SIZE, BALL_SIZE)
 

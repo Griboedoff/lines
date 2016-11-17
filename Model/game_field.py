@@ -126,11 +126,3 @@ class GameField:
 
     def is_in_field(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height
-
-        # todo handle full field
-        # todo tests
-        # todo очки, таблица рекордов(11 + 1), имя в конце
-        # todo подсказки (что появится следующим, подсказка хода(3/4 очков))
-        # todo радужные шарики
-        # todo пакетный режим
-        # todo nxn поле, шариков (n // 2) + 1

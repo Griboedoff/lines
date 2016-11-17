@@ -32,7 +32,7 @@ class GuiController(Controller):
         if len(self._selected_cells) == 2:
             second_clicked = self._selected_cells.pop()
             first_clicked = self._selected_cells.pop()
-            self.handle_move(first_clicked, second_clicked)
+            self._perform_move(first_clicked, second_clicked)
 
     def try_select_second_cell(self, coordinates):
         if self.field[coordinates].has_ball:
