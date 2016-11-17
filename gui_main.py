@@ -44,7 +44,8 @@ if __name__ == '__main__':
 
     game_field = initialize_game(parser.size)
     controller = GuiController(game_field,
-                               ScoreTable.load_from(parser.records, parser.mode))
+                               ScoreTable.load_from(parser.records,
+                                                    parser.mode))
     ex = GuiField(game_field, controller)
 
     sys.exit(app.exec_())
