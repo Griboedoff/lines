@@ -5,9 +5,27 @@ from Model.ball import Ball, BallColor
 
 class BallGenerator:
     @staticmethod
-    def generate_balls(ball_number):
-        return [Ball(BallColor(random.randint(0, 6))) for _ in
-                range(ball_number)]
+    def generate_balls(ball_number, with_multicolor):
+        generated = []
+        if with_multicolor:
+            for i in range(ball_number):
+                if random.randint(0,1) % 2 == 0:
+                    generated.append(BallGenerator.generate_multicolor())
+                else:
+                    generated.append(BallGenerator.generate_usual())
+            return generated
+        else:
+            return [BallGenerator.generate_usual() for _ in
+                    range(ball_number)]
+
+    @staticmethod
+    def generate_multicolor():
+        colors = [BallColor(random.randint(0, 6)) for _ in range(2)]
+        return Ball(colors)
+
+    @staticmethod
+    def generate_usual():
+        return Ball([BallColor(random.randint(0, 6))])
 
     @staticmethod
     def place_balls(field, balls):

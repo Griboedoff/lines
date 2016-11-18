@@ -38,8 +38,8 @@ class BallColor(enum.Enum):
 
 
 class Ball:
-    def __init__(self, color):
-        self._colors = {color}
+    def __init__(self, colors):
+        self._colors = set(colors)
 
     @property
     def is_multicolor(self):

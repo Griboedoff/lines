@@ -14,10 +14,16 @@ class ConsoleField(GameField):
             for y in self.height_r:
                 cell = self[(x, y)]
                 if not cell.has_ball:
-                    res_s.append(config.CELL_CHAR)
+                    res_s.append('({})'.format(config.CELL_CHAR * 2))
                 else:
-                    if not cell.ball.is_multicolor:
-                        res_s.append(
-                            BallColor.get_char_repr(cell.ball.colors[0]))
+                    res_s.append(ConsoleField.get_ball_chars(cell.ball))
             res.append(''.join(res_s))
         return '\n'.join(res)
+
+    @staticmethod
+    def get_ball_chars(ball):
+        if not ball.is_multicolor:
+            return '({})'.format(BallColor.get_char_repr(ball.colors[0]) * 2)
+        else:
+            return '({})'.format(
+                ''.join([BallColor.get_char_repr(c) for c in ball.colors]))

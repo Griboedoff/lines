@@ -1,11 +1,11 @@
 from Interfaces.controller import Controller
 from Model.game_field import GameField
-from Model.score_table import ScoreTable
+from Model.score_board import ScoreBoard
 from config import CELL_SIZE
 
 
 class GuiController(Controller):
-    def __init__(self, field: GameField, score_table: ScoreTable):
+    def __init__(self, field: GameField, score_table: ScoreBoard):
         super().__init__(field, score_table)
         self._selected_cells = []
 

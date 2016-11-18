@@ -3,8 +3,8 @@ import sys
 from Gui.gui_controller import GuiController
 from Model.ball import Ball, BallColor
 from Model.game_field import GameField
-from config import BALL_SHIFT, BALL_SIZE, CELL_COLOR, CELL_SIZE, QT_NOT_FOUND, \
-    SCORE_BOARD_SIZE
+from config import CELL_COLOR, CELL_SIZE, INNER_BALL_SHIFT, OUTER_BALL_SHIFT, \
+    OUTER_BALL_SIZE, QT_NOT_FOUND, SCORE_BOARD_SIZE, INNER_BALL_SIZE
 
 try:
     from PyQt5 import QtGui, QtWidgets, QtCore
@@ -89,14 +89,19 @@ class GuiField(QtWidgets.QWidget):
 
     @staticmethod
     def _draw_ball(painter, ball: Ball, x, y):
-        outer_x = x + BALL_SHIFT
-        outer_y = y + BALL_SHIFT
-        if not ball.is_multicolor:
-            painter.setBrush(
-                GuiField.qt_color_from_tuple(
-                    BallColor.get_qt_color_tuple(ball.colors[0])))
-            painter.drawEllipse(outer_x, outer_y,
-                                BALL_SIZE, BALL_SIZE)
+        outer_x = x + OUTER_BALL_SHIFT
+        outer_y = y + OUTER_BALL_SHIFT
+        painter.setBrush(GuiField.qt_color_from_tuple(
+            BallColor.get_qt_color_tuple(ball.colors[0])))
+        painter.drawEllipse(outer_x, outer_y,
+                            OUTER_BALL_SIZE, OUTER_BALL_SIZE)
+        if ball.is_multicolor:
+            inner_x = x + INNER_BALL_SHIFT
+            inner_y = y + INNER_BALL_SHIFT
+            painter.setBrush(GuiField.qt_color_from_tuple(
+                BallColor.get_qt_color_tuple(ball.colors[1])))
+            painter.drawEllipse(inner_x, inner_y,
+                                INNER_BALL_SIZE, INNER_BALL_SIZE)
 
     def _draw_highlighting(self, painter: QtGui.QPainter):
         painter.setPen(QtGui.QColor(255, 255, 0))

@@ -8,6 +8,7 @@ class GameField:
         self._field = [[Cell() for _ in range(field_size)] for _ in
                        range(field_size)]
         self._empty_cells_count = field_size * field_size
+        self.min_line_length = self.width // 2 + 1
 
     def __setitem__(self, key: tuple, value: Cell):
         x, y = key
@@ -65,7 +66,7 @@ class GameField:
                 line = self._count_same_color_balls_in_line(line_type,
                                                             coordinates,
                                                             color)
-                if len(line) >= (self.width // 2 + 1):
+                if len(line) >= self.min_line_length:
                     completed_line_types.append((line_type, line))
 
         return completed_line_types

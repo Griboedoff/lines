@@ -2,15 +2,14 @@ import re
 
 from Console.console_field import ConsoleField
 from Interfaces.controller import Controller
-from Model.ball import BallColor
-from Model.score_table import ScoreTable
+from Model.score_board import ScoreBoard
 
 SPLIT_RE = re.compile(r"\s+")
 MOVE_ARG_RE = re.compile(r'(?P<x>\d+)\s+(?P<y>\d+)')
 
 
 class ConsoleController(Controller):
-    def __init__(self, field: ConsoleField, score_table: ScoreTable):
+    def __init__(self, field: ConsoleField, score_table: ScoreBoard):
         super().__init__(field, score_table)
         self._funcs = {
             "move": self._cmd_move,
@@ -37,7 +36,7 @@ class ConsoleController(Controller):
                              .format(first_arg, second_arg))
         self._perform_move(self._get_coordinates_from_groupdict(start_match),
                            self._get_coordinates_from_groupdict(finish_match))
-        return self._cmd_show('')
+        self._cmd_show('')
 
     def _get_coordinates_from_groupdict(self, match):
         groupdict = match.groupdict()
@@ -58,20 +57,15 @@ chmod <N> - change hint mode to <N>
     2 - advanced
 
 show - displays field\n""")
-        return True
 
     def _cmd_score(self, cmd):
         print(self.score_table)
-        return True
 
     def _cmd_show(self, cmd):
         next_balls_to_add_ = ("Next balls: " + ''.join(
-            BallColor.get_char_repr(ball.colors[0]) for ball in
+            ConsoleField.get_ball_chars(ball) for ball in
             self.next_balls_to_add)) if self.show_simple_hint else ''
-        print('\n'
-              .join([str(self.field),
-                     next_balls_to_add_]))
-        return True
+        print('\n'.join([str(self.field), next_balls_to_add_]))
 
     def _cmd_chmod(self, cmd):
         try:
@@ -79,4 +73,3 @@ show - displays field\n""")
         except Exception:
             raise ValueError("Argument must be int, was {}".format(cmd[1]))
         self.set_game_mode(n)
-        return True

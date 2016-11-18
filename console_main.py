@@ -4,7 +4,7 @@ import os
 from Console.console_controller import ConsoleController
 from Console.console_field import ConsoleField
 from Model.ball_generator import BallGenerator
-from Model.score_table import ScoreTable
+from Model.score_board import ScoreBoard
 
 
 def cls():
@@ -28,7 +28,8 @@ def create_parser():
 
 def initialize_game(field_size):
     game_field = ConsoleField(parser.size)
-    BallGenerator.place_balls(game_field, BallGenerator.generate_balls(10))
+    BallGenerator.place_balls(game_field,
+                              BallGenerator.generate_balls(10, False))
     return game_field
 
 
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     parser = create_parser()
     game_field = initialize_game(parser.size)
     controller = ConsoleController(game_field,
-                                   ScoreTable.load_from(parser.records,
+                                   ScoreBoard.load_from(parser.records,
                                                         parser.mode))
 
     cls()

@@ -7,7 +7,7 @@ from Gui.gui_controller import GuiController
 from Gui.gui_field import GuiField
 from Model.ball_generator import BallGenerator
 from Model.game_field import GameField
-from Model.score_table import ScoreTable
+from Model.score_board import ScoreBoard
 
 try:
     from PyQt5 import QtGui, QtCore, QtWidgets
@@ -33,7 +33,8 @@ def create_parser():
 
 def initialize_game(field_size):
     game_field = GameField(parser.size)
-    BallGenerator.place_balls(game_field, BallGenerator.generate_balls(10))
+    BallGenerator.place_balls(game_field,
+                              BallGenerator.generate_balls(10, False))
     return game_field
 
 
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
     game_field = initialize_game(parser.size)
     controller = GuiController(game_field,
-                               ScoreTable.load_from(parser.records,
+                               ScoreBoard.load_from(parser.records,
                                                     parser.mode))
     ex = GuiField(game_field, controller)
 

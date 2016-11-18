@@ -1,1 +1,1 @@
-{"John Lennon": 150, "George Harrison": 140, "Paul McCartney": 200, "bla bla bla": 0, "Ringo Starr": 100}
+{"John Lennon": 15, "George Harrison": 14, "Paul McCartney": 20, "bla bla bla": 0, "Ringo Starr": 10}
