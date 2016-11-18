@@ -13,7 +13,7 @@ class BallColor(enum.Enum):
     BROWN = 6
 
     @staticmethod
-    def get_qt_color(ball_color):
+    def get_qt_color_tuple(ball_color):
         ball_color_match_dict = {
             BallColor.GREEN: config.BALL_COLOR_GREEN,
             BallColor.RED: config.BALL_COLOR_RED,

@@ -92,7 +92,9 @@ class GuiField(QtWidgets.QWidget):
         outer_x = x + BALL_SHIFT
         outer_y = y + BALL_SHIFT
         if not ball.is_multicolor:
-            painter.setBrush(BallColor.get_qt_color(ball.colors[0]))
+            painter.setBrush(
+                GuiField.qt_color_from_tuple(
+                    BallColor.get_qt_color_tuple(ball.colors[0])))
             painter.drawEllipse(outer_x, outer_y,
                                 BALL_SIZE, BALL_SIZE)
 
@@ -104,6 +106,10 @@ class GuiField(QtWidgets.QWidget):
 
     @staticmethod
     def _draw_cell(painter: QtGui.QPainter, x, y):
-        painter.setBrush(CELL_COLOR)
+        painter.setBrush(GuiField.qt_color_from_tuple(CELL_COLOR))
         painter.drawRect(x, y,
                          CELL_SIZE, CELL_SIZE)
+
+    @staticmethod
+    def qt_color_from_tuple(t):
+        return QtGui.QColor(*t)

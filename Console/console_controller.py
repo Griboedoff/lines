@@ -37,32 +37,32 @@ class ConsoleController(Controller):
                              .format(first_arg, second_arg))
         self._perform_move(self._get_coordinates_from_groupdict(start_match),
                            self._get_coordinates_from_groupdict(finish_match))
-        self._cmd_show('')
+        return self._cmd_show('')
 
     def _get_coordinates_from_groupdict(self, match):
         groupdict = match.groupdict()
         return int(groupdict['x']) - 1, int(groupdict['y']) - 1
 
     def _cmd_help(self, cmd):
-        print("""
-        help - displays this message
+        print(
+            """help - displays this message
 
-        move <a1> <a2> - move ball from cell <a1> to cell <a2>
-            <a1> = <x> <y> - where <x>, <y> int coordinates
+move <a1> <a2> - move ball from cell <a1> to cell <a2>
+    <a1> = <x> <y> - where <x>, <y> int coordinates
 
-        score - displays scoreboard
+score - displays scoreboard
 
-        chmod <N> - change hint mode to <N>
-            0 - no hint
-            1 - simple
-            2 - advanced
+chmod <N> - change hint mode to <N>
+    0 - no hint
+    1 - simple
+    2 - advanced
 
-        show - displays field
-
-        """)
+show - displays field\n""")
+        return True
 
     def _cmd_score(self, cmd):
         print(self.score_table)
+        return True
 
     def _cmd_show(self, cmd):
         next_balls_to_add_ = ("Next balls: " + ''.join(
@@ -71,6 +71,7 @@ class ConsoleController(Controller):
         print('\n'
               .join([str(self.field),
                      next_balls_to_add_]))
+        return True
 
     def _cmd_chmod(self, cmd):
         try:
@@ -78,3 +79,4 @@ class ConsoleController(Controller):
         except Exception:
             raise ValueError("Argument must be int, was {}".format(cmd[1]))
         self.set_game_mode(n)
+        return True

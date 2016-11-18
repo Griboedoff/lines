@@ -39,17 +39,20 @@ if __name__ == '__main__':
                                    ScoreTable.load_from(parser.records,
                                                         parser.mode))
 
+    cls()
     print("""Hello there!
-    to start playing print 'show'
+    to start playing print 'start'
     use 'help' to get other commands
 
     Good luck!""")
     while not controller.is_over:
+        cmd = input()
         cls()
         try:
-            controller.execute(input())
+            started = controller.execute(cmd)
         except Exception as e:
             print(e.args[0] + "\nUse \"help\" for help")
+
     while 1:
         cls()
         print("""Game Over
