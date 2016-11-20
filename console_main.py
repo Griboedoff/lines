@@ -18,7 +18,7 @@ def create_parser():
                         help='Path to records table')
     parser.add_argument('-s', '--size', default=9, type=int,
                         help='Game field size')
-    parser.add_argument("-m", '--mode', type=int, default=1,
+    parser.add_argument("-h", '--hint-mode', type=int, default=1,
                         help='\n'.join(('Set hints mode:',
                                         '0 - no hints',
                                         '1 - show 3 next balls',
@@ -26,19 +26,16 @@ def create_parser():
     return parser.parse_args()
 
 
-def initialize_game(field_size):
-    game_field = ConsoleField(parser.size)
-    BallGenerator.place_balls(game_field,
-                              BallGenerator.generate_balls(10, False))
-    return game_field
-
-
 if __name__ == '__main__':
     parser = create_parser()
-    game_field = initialize_game(parser.size)
-    controller = ConsoleController(game_field,
-                                   ScoreBoard.load_from(parser.records,
-                                                        parser.mode))
+
+    game_field = ConsoleField(parser.size)
+    controller = ConsoleController(
+        game_field,
+        ScoreBoard.load_from(parser.records, parser.mode))
+    BallGenerator.place_balls(ConsoleField(parser.size),
+                              controller,
+                              BallGenerator.generate_balls(10, False))
 
     cls()
     print("""Hello there!

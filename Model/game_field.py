@@ -1,5 +1,5 @@
-from Model.ball import Ball
 from Model.cell import Cell
+from Model.line import Line
 from Model.lines_types import LinesTypes
 
 
@@ -27,6 +27,10 @@ class GameField:
         return len(self._field)
 
     @property
+    def ball_cells(self):
+        return filter(self._field)
+
+    @property
     def width_r(self):
         return range(self.width)
 
@@ -48,32 +52,28 @@ class GameField:
 
     # endregion
 
-    def add_ball_to_nth_empty_cell(self, n, ball: Ball):
-        с = 0
-        for line in self._field:
-            for cell in line:
-                if not cell.has_ball:
-                    с += 1
-                if n == с:
-                    cell.ball = ball
-                    self._empty_cells_count -= 1
-                    return
+    def set_ball(self, coordinates, ball):
+        self[coordinates].ball = ball
+        self._empty_cells_count -= 1
+
+    def get_completed_lines(self, coordinates):
+        return list(filter(lambda x: len(x) >= self.min_line_length,
+                           self.find_lines_length(coordinates)))
 
     def find_lines_length(self, coordinates: tuple):
-        completed_line_types = []
+        lines = []
         for color in self[coordinates].ball_colors:
             for line_type in LinesTypes:
-                line = self._count_same_color_balls_in_line(line_type,
-                                                            coordinates,
-                                                            color)
-                if len(line) >= self.min_line_length:
-                    completed_line_types.append((line_type, line))
-
-        return completed_line_types
+                lines.append(
+                    self._count_same_color_balls_in_line(line_type,
+                                                         coordinates,
+                                                         color))
+        return lines
 
     def _count_same_color_balls_in_line(self, line_type: LinesTypes,
                                         coordinates, color):
         line = [coordinates]
+        place_to_insert = 0
         for d_v in LinesTypes.get_delta_vectors(line_type):
             i = 1
             current_cell_coordinated = (coordinates[0] + d_v[0] * i,
@@ -82,20 +82,20 @@ class GameField:
                        self[current_cell_coordinated].has_ball):
                 if color not in self[current_cell_coordinated].ball_colors:
                     break
-                line.append(current_cell_coordinated)
+                line.insert(place_to_insert, current_cell_coordinated)
                 i += 1
                 current_cell_coordinated = (coordinates[0] + d_v[0] * i,
                                             coordinates[1] + d_v[1] * i)
-
-        return line
+            place_to_insert = -1
+        return Line(line, line_type)
 
     def try_remove_lines(self, lines):
         if lines:
-            longest_line = max(lines, key=lambda x: len(x[1]))
-            for coordinates in longest_line[1]:
+            longest_line = max(lines, key=lambda x: len(x))
+            for coordinates in longest_line.balls:
                 self._empty_cells_count += 1
                 self[coordinates] = Cell()
-            return len(longest_line[1])
+            return len(longest_line)
 
     def try_perform_move(self, start, finish):
         if not self[start].has_ball or start == finish or self[finish].has_ball:
