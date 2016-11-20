@@ -1,1 +1,1 @@
-{"John Lennon": 15, "George Harrison": 14, "Paul McCartney": 20, "bla bla bla": 0, "Ringo Starr": 10}
+{"bla bla bla": 0, "Paul McCartney": 20, "Ringo Starr": 10, "George Harrison": 14, "John Lennon": 15, "qwe": 16}

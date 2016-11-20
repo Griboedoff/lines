@@ -50,7 +50,18 @@ class GameField:
     def empty_cells_count(self):
         return self._empty_cells_count
 
+    @property
+    def balls(self):
+        for x in self.width_r:
+            for y in self.height_r:
+                coordinates = (x, y)
+                if self[coordinates].has_ball:
+                    yield (self[coordinates].ball, coordinates)
+
     # endregion
+
+    def is_empty(self, coordinates):
+        return self.is_in_field(*coordinates) and not self[coordinates].has_ball
 
     def set_ball(self, coordinates, ball):
         self[coordinates].ball = ball
@@ -87,7 +98,7 @@ class GameField:
                 current_cell_coordinated = (coordinates[0] + d_v[0] * i,
                                             coordinates[1] + d_v[1] * i)
             place_to_insert = -1
-        return Line(line, line_type)
+        return Line(line, line_type, color)
 
     def try_remove_lines(self, lines):
         if lines:
@@ -97,18 +108,17 @@ class GameField:
                 self[coordinates] = Cell()
             return len(longest_line)
 
-    def try_perform_move(self, start, finish):
+    def is_correct_move(self, start, finish):
         if not self[start].has_ball or start == finish or self[finish].has_ball:
             return False
-
-        is_correct_move = self.is_correct_move(start, finish)
-        if is_correct_move:
-            self[finish] = self[start]
-            self[start] = Cell()
-
+        is_correct_move = self.is_path_exists(start, finish)
         return is_correct_move
 
-    def is_correct_move(self, start, finish):
+    def perform_move(self, start, finish):
+        self[finish] = self[start]
+        self[start] = Cell()
+
+    def is_path_exists(self, start, finish):
         visited = {start}
         st = [start]
         d_coordinates = [(0, 1), (1, 0), (-1, 0), (0, -1)]

@@ -5,21 +5,23 @@ CURR_SCORE = 'Your score'
 
 class ScoreBoard:
     def __init__(self, path: str, json: dict, game_mode: int):
-        self._game_mode = game_mode
+        self._hint_mode = game_mode
         self._path = path
         self._score_dict = json
         self._score_dict[CURR_SCORE] = 0
         self.max_score = max(self._score_dict.values())
 
-    def set_game_mode(self, n):
-        self._game_mode = n
+    def set_hint_mode(self, n):
+        if self._hint_mode == 2:
+            raise ValueError("You can't change hint mode if it set for 2")
+        self._hint_mode = n
 
     def update_score(self, d_score: int):
         self._score_dict[CURR_SCORE] += d_score
 
     @property
-    def game_mode(self):
-        return self._game_mode
+    def hint_mode(self):
+        return self._hint_mode
 
     @property
     def current_score(self):
@@ -42,10 +44,6 @@ class ScoreBoard:
 
     def save(self):
         with open(self._path, 'w') as f:
-            f.write(json.dumps(self._score_dict))
-
-    def save_to(self, path: str):
-        with open(path, 'w') as f:
             f.write(json.dumps(self._score_dict))
 
     def __str__(self):

@@ -1,4 +1,5 @@
 import re
+import sys
 
 from Console.console_field import ConsoleField
 from Interfaces.controller import Controller
@@ -17,14 +18,19 @@ class ConsoleController(Controller):
             "score": self._cmd_score,
             "chmod": self._cmd_chmod,
             "show": self._cmd_show,
+            "hint": self._cmd_hint,
+            "exit": self._cmd_exit
         }
 
     def execute(self, cmd: str):
         splitted_cmd = SPLIT_RE.split(cmd)
         if splitted_cmd[0] not in self._funcs.keys():
-            raise ValueError(
-                "Can't recognize command {}".format(splitted_cmd[0]))
+            raise ValueError("Can't recognize command {}"
+                             .format(splitted_cmd[0]))
         self._funcs[splitted_cmd[0]](splitted_cmd)
+
+    def _cmd_exit(self, cmd):
+        sys.exit()
 
     def _cmd_move(self, cmd):
         first_arg = ' '.join([cmd[1], cmd[2]])
@@ -38,7 +44,8 @@ class ConsoleController(Controller):
                            self._get_coordinates_from_groupdict(finish_match))
         self._cmd_show('')
 
-    def _get_coordinates_from_groupdict(self, match):
+    @staticmethod
+    def _get_coordinates_from_groupdict(match):
         groupdict = match.groupdict()
         return int(groupdict['x']) - 1, int(groupdict['y']) - 1
 
@@ -56,10 +63,27 @@ chmod <N> - change hint mode to <N>
     1 - simple
     2 - advanced
 
-show - displays field\n""")
+show - displays field\n
+
+hint - displays hint if hint mode set to 2
+
+exit - stops and exit the game""")
 
     def _cmd_score(self, cmd):
         print(self.score_table)
+
+    def _cmd_hint(self, cmd):
+        if self.show_advanced_hint:
+            hint = self.find_move_for_hint()
+            if hint:
+                print("from {} {} to {} {}".format(
+                    hint[0][0] + 1, hint[0][1] + 1,
+                    hint[1][0] + 1, hint[1][1] + 1))
+
+                self._cmd_show("")
+        else:
+            print('Your hint mode set to {}\nNo hint for you'.
+                  format(self.score_table.hint_mode))
 
     def _cmd_show(self, cmd):
         next_balls_to_add_ = ("Next balls: " + ''.join(
@@ -72,4 +96,4 @@ show - displays field\n""")
             n = int(cmd[1])
         except Exception:
             raise ValueError("Argument must be int, was {}".format(cmd[1]))
-        self.set_game_mode(n)
+        self.set_hint_mode(n)
