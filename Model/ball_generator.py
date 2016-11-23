@@ -1,30 +1,32 @@
 import random
 
-from Model.ball import Ball, BallColor
+from typing import List
+
+from Model.ball import Ball
+from Model.ball_color import BallColor
 
 
 class BallGenerator:
     @staticmethod
-    def generate_balls(ball_number, with_multicolor):
+    def generate_balls(ball_number, with_multicolor=False) -> List[Ball]:
         generated = []
         if with_multicolor:
             for i in range(ball_number):
-                if random.choice((0, 1)) == 0:
-                    generated.append(BallGenerator.generate_multicolor())
-                else:
-                    generated.append(BallGenerator.generate_usual())
+                func = random.choice(
+                    (BallGenerator._generate_multicolor,
+                     BallGenerator._generate_usual))
+                generated.append(func())
             return generated
         else:
-            return [BallGenerator.generate_usual() for _ in
-                    range(ball_number)]
+            return [BallGenerator._generate_usual() for _ in range(ball_number)]
 
     @staticmethod
-    def generate_multicolor():
+    def _generate_multicolor() -> Ball:
         colors = [BallColor(random.randint(0, 6)) for _ in range(2)]
         return Ball(colors)
 
     @staticmethod
-    def generate_usual():
+    def _generate_usual() -> Ball:
         return Ball([BallColor(random.randint(0, 6))])
 
     @staticmethod

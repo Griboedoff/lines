@@ -18,11 +18,11 @@ class Controller:
 
     @property
     def show_simple_hint(self):
-        return self.score_table._hint_mode > 0
+        return self.score_table.hint_mode > 0
 
     @property
     def show_advanced_hint(self):
-        return self.score_table._hint_mode > 1
+        return self.score_table.hint_mode > 1
 
     @property
     def is_over(self):
@@ -77,8 +77,9 @@ class Controller:
     def _find_all_lines(self):
         lines = {i: set() for i in range(1, self.field.min_line_length)}
         for ball, coordinates in self.field.balls:
-            for line in self.field.find_lines_length(coordinates):
-                lines[len(line)].add(line)
+            for line in self.field.find_lines(coordinates):
+                if len(line) <= self.field.min_line_length:
+                    lines[len(line)].add(line)
         return lines
 
     def _generate_next_balls(self):

@@ -1,5 +1,5 @@
 import config
-from Model.ball import BallColor
+from Model.ball_color import BallColor
 from Model.game_field import GameField
 
 

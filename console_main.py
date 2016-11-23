@@ -8,7 +8,6 @@ from Model.score_board import ScoreBoard
 from utils import create_parser
 
 
-
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -24,7 +23,6 @@ def main():
                               controller,
                               BallGenerator.generate_balls(10, False))
 
-
     cls()
     print("""Hello there!
     to start playing print 'start'
@@ -35,11 +33,8 @@ def main():
     while not controller.is_over:
         try:
             run_command(controller)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt or EOFError:
             print("\nTo stop the game type 'exit'")
-        except EOFError:
-            print("\nTo stop the game type 'exit'")
-
 
     while 1:
         cls()

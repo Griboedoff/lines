@@ -1,6 +1,6 @@
 from Model.cell import Cell
 from Model.line import Line
-from Model.lines_types import LinesTypes
+from Model.lines_types import LineType
 
 
 class GameField:
@@ -13,9 +13,11 @@ class GameField:
     def __setitem__(self, key: tuple, value: Cell):
         x, y = key
         if isinstance(value, Cell):
+            if value.has_ball and not self._field[x][y].has_ball:
+                self._empty_cells_count -= 1
+            if not value.has_ball and self._field[x][y].has_ball:
+                self._empty_cells_count += 1
             self._field[x][y] = value
-        else:
-            raise TypeError("{} in not Cell instance".format(type(value)))
 
     def __getitem__(self, item: tuple):
         x, y = item
@@ -25,10 +27,6 @@ class GameField:
     @property
     def width(self):
         return len(self._field)
-
-    @property
-    def ball_cells(self):
-        return filter(self._field)
 
     @property
     def width_r(self):
@@ -41,10 +39,6 @@ class GameField:
     @property
     def height_r(self):
         return range(self.height)
-
-    @property
-    def get_field(self):
-        return self._field
 
     @property
     def empty_cells_count(self):
@@ -69,28 +63,28 @@ class GameField:
 
     def get_completed_lines(self, coordinates):
         return list(filter(lambda x: len(x) >= self.min_line_length,
-                           self.find_lines_length(coordinates)))
+                           self.find_lines(coordinates)))
 
-    def find_lines_length(self, coordinates: tuple):
+    def find_lines(self, coordinates: tuple):
         lines = []
         for color in self[coordinates].ball_colors:
-            for line_type in LinesTypes:
+            for line_type in LineType:
                 lines.append(
                     self._count_same_color_balls_in_line(line_type,
                                                          coordinates,
                                                          color))
         return lines
 
-    def _count_same_color_balls_in_line(self, line_type: LinesTypes,
+    def _count_same_color_balls_in_line(self, line_type: LineType,
                                         coordinates, color):
         line = [coordinates]
         place_to_insert = 0
-        for d_v in LinesTypes.get_delta_vectors(line_type):
+        for d_v in LineType.get_delta_vectors(line_type):
             i = 1
             current_cell_coordinated = (coordinates[0] + d_v[0] * i,
                                         coordinates[1] + d_v[1] * i)
             while (self.is_in_field(*current_cell_coordinated) and
-                       self[current_cell_coordinated].has_ball):
+                    self[current_cell_coordinated].has_ball):
                 if color not in self[current_cell_coordinated].ball_colors:
                     break
                 line.insert(place_to_insert, current_cell_coordinated)
@@ -104,7 +98,6 @@ class GameField:
         if lines:
             longest_line = max(lines, key=lambda x: len(x))
             for coordinates in longest_line.balls:
-                self._empty_cells_count += 1
                 self[coordinates] = Cell()
             return len(longest_line)
 

@@ -1,4 +1,4 @@
-from Model.lines_types import LinesTypes
+from Model.lines_types import LineType
 
 
 class Line:
@@ -11,12 +11,12 @@ class Line:
 
     @property
     def start_edge(self):
-        d_v = LinesTypes.get_delta_vectors(self.type)[0]
+        d_v = LineType.get_delta_vectors(self.type)[0]
         return self.start[0] + d_v[0], self.start[1] + d_v[1]
 
     @property
     def end_edge(self):
-        d_v = LinesTypes.get_delta_vectors(self.type)[1]
+        d_v = LineType.get_delta_vectors(self.type)[1]
         return self.end[0] + d_v[0], self.end[1] + d_v[1]
 
     def __len__(self):

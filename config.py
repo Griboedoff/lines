@@ -1,5 +1,3 @@
-import sys
-
 # region ExitCodes
 QT_NOT_FOUND = 100
 # endregion
@@ -10,6 +8,8 @@ OUTER_BALL_SHIFT = (CELL_SIZE - OUTER_BALL_SIZE) // 2
 INNER_BALL_SIZE = 24
 INNER_BALL_SHIFT = (CELL_SIZE - INNER_BALL_SIZE) // 2
 SCORE_BOARD_SIZE = 3 * CELL_SIZE + 5
+
+SIZE_CHANGE = [0, 6, 12, 18]
 
 # region Colors
 # region BallColors

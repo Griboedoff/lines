@@ -4,10 +4,10 @@ CURR_SCORE = 'Your score'
 
 
 class ScoreBoard:
-    def __init__(self, path: str, json: dict, game_mode: int):
+    def __init__(self, path: str, parsed_json: dict, game_mode: int):
         self._hint_mode = game_mode
         self._path = path
-        self._score_dict = json
+        self._score_dict = parsed_json
         self._score_dict[CURR_SCORE] = 0
         self.max_score = max(self._score_dict.values())
 
@@ -32,7 +32,7 @@ class ScoreBoard:
         try:
             with open(path, 'r') as f:
                 return ScoreBoard(path, json.loads(f.read()), game_mode)
-        except Exception as e:
+        except IOError:
             return ScoreBoard('./records.json', {}, game_mode)
 
     def set_name(self, name: str):
