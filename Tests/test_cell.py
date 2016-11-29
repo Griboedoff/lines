@@ -1,13 +1,13 @@
-#!/usr/bin/env python3
 import os
 import sys
-from unittest import TestCase
+from unittest import TestCase, main
 
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
 from Model.ball import Ball
 from Model.ball_color import BallColor
 from Model.cell import Cell
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 
 class TestCell(TestCase):
@@ -22,3 +22,7 @@ class TestCell(TestCase):
     def test_ball_colors(self):
         self.assertIsNone(self.cell.ball_colors)
         self.assertSetEqual(set(self.ball_cell.ball_colors), {BallColor.RED})
+
+
+if __name__ == '__main__':
+    main()

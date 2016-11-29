@@ -55,7 +55,8 @@ class GameField:
     # endregion
 
     def is_empty(self, coordinates):
-        return self.is_in_field(*coordinates) and not self[coordinates].has_ball
+        return (self.is_in_field(*coordinates) and
+                not self[coordinates].has_ball)
 
     def set_ball(self, coordinates, ball):
         self[coordinates].ball = ball
@@ -102,7 +103,8 @@ class GameField:
             return len(longest_line)
 
     def is_correct_move(self, start, finish):
-        if not self[start].has_ball or start == finish or self[finish].has_ball:
+        if (not self[start].has_ball or start == finish or
+                self[finish].has_ball):
             return False
         is_correct_move = self.is_path_exists(start, finish)
         return is_correct_move

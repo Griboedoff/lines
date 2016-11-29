@@ -1,14 +1,14 @@
 import os
 import sys
-from unittest import TestCase
-
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
+from unittest import TestCase, main
 
 from Interfaces.controller import Controller
 from Model.ball_generator import BallGenerator
 from Model.game_field import GameField
 from Model.score_board import ScoreBoard
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 
 class TestBallGenerator(TestCase):
@@ -32,3 +32,7 @@ class TestBallGenerator(TestCase):
         controller = Controller(field, ScoreBoard("", {1: 1}, 1), False)
         BallGenerator.place_balls(field, controller, ball)
         self.assertTrue(ball[0] in map(lambda x: x[0], field.balls))
+
+
+if __name__ == '__main__':
+    main()

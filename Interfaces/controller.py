@@ -67,8 +67,9 @@ class Controller:
 
     def _try_find_move(self, line, edge_coordinates):
         if self.field.is_empty(edge_coordinates):
-            for ball, coordinates in filter(lambda b: line.color in b[0].colors,
-                                            self.field.balls):
+            for ball, coordinates in filter(
+                    lambda b: line.color in b[0].colors,
+                    self.field.balls):
                 if coordinates in line:
                     continue
                 if self.field.is_correct_move(coordinates, edge_coordinates):
@@ -87,8 +88,8 @@ class Controller:
         self.next_balls_to_add = BallGenerator.generate_balls(
             3,
             self.debug,
-            (self.score_table.current_score > max(20 * self.min_score,
-                                                  self.score_table.max_score)))
+            (self.score_table.current_score >
+             max(20 * self.min_score, self.score_table.max_score)))
 
     def add_ball_to_nth_empty_cell(self, n, ball: Ball):
         с = 0

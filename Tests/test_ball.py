@@ -1,12 +1,12 @@
 import os
 import sys
-from unittest import TestCase
-
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
+from unittest import TestCase, main
 
 from Model.ball import Ball
 from Model.ball_color import BallColor
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 
 class TestBall(TestCase):
@@ -23,3 +23,7 @@ class TestBall(TestCase):
         self.assertSetEqual(set(self.multicolor_color_ball.colors),
                             {BallColor.CYAN, BallColor.BROWN})
         self.assertSetEqual(set(self.one_color_ball.colors), {BallColor.CYAN})
+
+
+if __name__ == '__main__':
+    main()

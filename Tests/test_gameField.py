@@ -1,14 +1,15 @@
 import os
 import sys
-from unittest import TestCase
+from unittest import TestCase, main
 
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
 from Model.ball import Ball
 from Model.ball_color import BallColor
 from Model.ball_generator import BallGenerator
 from Model.cell import Cell
 from Model.game_field import GameField
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 
 class TestGameField(TestCase):
@@ -103,3 +104,7 @@ class TestGameField(TestCase):
     def test_is_in_field(self):
         self.assertFalse(bool(self.field.is_in_field(-1, -1)))
         self.assertTrue(self.field.is_in_field(1, 1))
+
+
+if __name__ == '__main__':
+    main()

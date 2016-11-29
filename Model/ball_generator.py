@@ -8,7 +8,7 @@ from Model.ball_color import BallColor
 
 class BallGenerator:
     @staticmethod
-    def generate_balls(ball_number, debug, with_multicolor=False) -> List[Ball]:
+    def generate_balls(ball_number, debug, with_multicolor=False):
         generated = []
         for i in range(ball_number):
             if debug:

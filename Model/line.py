@@ -26,8 +26,8 @@ class Line:
         return 'len= {}, type= {}'.format(len(self), self.type)
 
     def __hash__(self):
-        return int(self.start[0] ^ 397 + self.start[1]
-                   + self.end[0] ^ 397 + self.end[1])
+        return int(self.start[0] ^ 397 + self.start[1] +
+                   self.end[0] ^ 397 + self.end[1])
 
     def __contains__(self, item):
         return item in self.balls

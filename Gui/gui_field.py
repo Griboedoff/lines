@@ -32,7 +32,7 @@ class GuiField(QtWidgets.QWidget):
         width = self.field.width * self.cell_size + SCORE_BOARD_SIZE
         height = self.field.height * self.cell_size
         if max_w >= width or max_h >= height:
-            self.resize(width, height)
+            self.setFixedSize(width, height)
             return
         self.show_message_box("The field is bigger than the screen")
         self.exit()
@@ -119,12 +119,14 @@ class GuiField(QtWidgets.QWidget):
     def _draw_score_board(self, painter: QtGui.QPainter):
         painter.drawText(self.right_panel_shift, 0,
                          SCORE_BOARD_SIZE, self.field.height * self.cell_size,
-                         QtCore.Qt.AlignLeft, str(self._controller.score_table))
+                         QtCore.Qt.AlignLeft,
+                         str(self._controller.score_table))
 
     def _draw_cells(self, painter: QtGui.QPainter):
         for x in self.field.width_r:
             for y in self.field.height_r:
-                self._draw_cell(painter, x * self.cell_size, y * self.cell_size)
+                self._draw_cell(painter, x * self.cell_size,
+                                y * self.cell_size)
 
     def _draw_balls(self, painter: QtGui.QPainter):
         for x in self.field.width_r:

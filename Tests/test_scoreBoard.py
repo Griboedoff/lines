@@ -1,10 +1,11 @@
 import os
 import sys
-from unittest import TestCase
+from unittest import TestCase, main
+
+from Model.score_board import ScoreBoard
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from Model.score_board import ScoreBoard
 
 
 class TestScoreBoard(TestCase):
@@ -23,3 +24,7 @@ class TestScoreBoard(TestCase):
         name = "qwe"
         self.board.set_name(name)
         self.assertTrue(name in self.board._score_dict.keys())
+
+
+if __name__ == '__main__':
+    main()

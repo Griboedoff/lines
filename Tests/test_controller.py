@@ -1,9 +1,6 @@
 import os
 import sys
-from unittest import TestCase
-
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
+from unittest import TestCase, main
 
 from Interfaces.controller import Controller
 from Model.ball import Ball
@@ -11,6 +8,9 @@ from Model.ball_color import BallColor
 from Model.cell import Cell
 from Model.game_field import GameField
 from Model.score_board import ScoreBoard
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 
 class TestController(TestCase):
@@ -66,3 +66,7 @@ class TestController(TestCase):
         self.controller.set_hint_mode(0)
 
         self.assertRaises(self.controller.score_table.hint_mode == 0)
+
+
+if __name__ == '__main__':
+    main()
