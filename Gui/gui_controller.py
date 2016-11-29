@@ -5,8 +5,8 @@ from config import CELL_SIZE
 
 
 class GuiController(Controller):
-    def __init__(self, field: GameField, score_table: ScoreBoard):
-        super().__init__(field, score_table)
+    def __init__(self, field: GameField, score_table: ScoreBoard, debug):
+        super().__init__(field, score_table, debug)
         self._selected_cells = []
 
     @property
@@ -18,9 +18,8 @@ class GuiController(Controller):
     def has_selected_cell(self):
         return bool(self._selected_cells)
 
-    def handle_mouse_click(self, mouse_pos, d_size):
-        cell_size = CELL_SIZE - d_size
-        coordinates = (mouse_pos.x() // cell_size, mouse_pos.y() // cell_size)
+    def handle_mouse_click(self, mouse_pos):
+        coordinates = (mouse_pos.x() // CELL_SIZE, mouse_pos.y() // CELL_SIZE)
         if not self.field.is_in_field(*coordinates):
             return
 

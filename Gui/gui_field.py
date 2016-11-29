@@ -5,8 +5,7 @@ from Model.ball import Ball
 from Model.ball_color import BallColor
 from Model.game_field import GameField
 from config import CELL_COLOR, CELL_SIZE, INNER_BALL_SHIFT, INNER_BALL_SIZE, \
-    OUTER_BALL_SHIFT, OUTER_BALL_SIZE, QT_NOT_FOUND, SCORE_BOARD_SIZE, \
-    SIZE_CHANGE
+    OUTER_BALL_SHIFT, OUTER_BALL_SIZE, QT_NOT_FOUND, SCORE_BOARD_SIZE
 
 try:
     from PyQt5 import QtGui, QtWidgets, QtCore
@@ -30,15 +29,12 @@ class GuiField(QtWidgets.QWidget):
         app = QtCore.QCoreApplication.instance()
         geom = app.desktop().availableGeometry()
         (max_w, max_h) = (geom.width(), geom.height())
-        for d_size in SIZE_CHANGE:
-            self.d_size = d_size
-            self.cell_size -= d_size
-            width = self.field.width * self.cell_size + SCORE_BOARD_SIZE
-            height = self.field.height * self.cell_size
-            if max_w >= width or max_h >= height:
-                self.resize(width, height)
-                return
-        self.show_message_box("Your screen is less than field size")
+        width = self.field.width * self.cell_size + SCORE_BOARD_SIZE
+        height = self.field.height * self.cell_size
+        if max_w >= width or max_h >= height:
+            self.resize(width, height)
+            return
+        self.show_message_box("The field is bigger than the screen")
         self.exit()
 
     @staticmethod
@@ -51,7 +47,7 @@ class GuiField(QtWidgets.QWidget):
         self.show()
 
     def mousePressEvent(self, q_mouse_event: QtGui.QMouseEvent):
-        self._controller.handle_mouse_click(q_mouse_event.pos(), self.d_size)
+        self._controller.handle_mouse_click(q_mouse_event.pos())
         self.repaint()
 
     def paintEvent(self, event):
@@ -144,16 +140,14 @@ class GuiField(QtWidgets.QWidget):
         painter.setBrush(GuiField.qt_color_from_tuple(
             BallColor.get_qt_color_tuple(ball.colors[0])))
         painter.drawEllipse(outer_x, outer_y,
-                            OUTER_BALL_SIZE - self.d_size,
-                            OUTER_BALL_SIZE - self.d_size)
+                            OUTER_BALL_SIZE, OUTER_BALL_SIZE)
         if ball.is_multicolor:
             inner_x = x + INNER_BALL_SHIFT
             inner_y = y + INNER_BALL_SHIFT
             painter.setBrush(GuiField.qt_color_from_tuple(
                 BallColor.get_qt_color_tuple(ball.colors[1])))
             painter.drawEllipse(inner_x, inner_y,
-                                INNER_BALL_SIZE - self.d_size,
-                                INNER_BALL_SIZE - self.d_size)
+                                INNER_BALL_SIZE, INNER_BALL_SIZE)
 
     def _draw_cell(self, painter: QtGui.QPainter, x, y):
         painter.setBrush(GuiField.qt_color_from_tuple(CELL_COLOR))

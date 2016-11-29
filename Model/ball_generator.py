@@ -8,17 +8,21 @@ from Model.ball_color import BallColor
 
 class BallGenerator:
     @staticmethod
-    def generate_balls(ball_number, with_multicolor=False) -> List[Ball]:
+    def generate_balls(ball_number, debug, with_multicolor=False) -> List[Ball]:
         generated = []
-        if with_multicolor:
-            for i in range(ball_number):
-                func = random.choice(
-                    (BallGenerator._generate_multicolor,
-                     BallGenerator._generate_usual))
-                generated.append(func())
-            return generated
-        else:
-            return [BallGenerator._generate_usual() for _ in range(ball_number)]
+        for i in range(ball_number):
+            if debug:
+                func = random.choice((BallGenerator._generate_multicolor,
+                                      BallGenerator._generate_usual))
+            elif with_multicolor:
+                if random.randint(0, 10) == 5:
+                    func = BallGenerator._generate_multicolor
+                else:
+                    func = BallGenerator._generate_usual
+            else:
+                func = BallGenerator._generate_usual
+            generated.append(func())
+        return generated
 
     @staticmethod
     def _generate_multicolor() -> Ball:

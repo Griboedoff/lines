@@ -13,6 +13,6 @@ def create_parser():
 0 - no hints
 1 - show 3 next balls
 2 - show one possible move''')
-    parser.add_argument('-d', '--debug', type=int, default=0,
+    parser.add_argument('--debug', action='store_true',
                         help='set debug mode on')
     return parser.parse_args()

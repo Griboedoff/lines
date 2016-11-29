@@ -1,5 +1,9 @@
+import os
+import sys
 from unittest import TestCase
 
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 from Model.score_board import ScoreBoard
 
 

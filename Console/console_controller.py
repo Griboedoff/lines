@@ -10,8 +10,8 @@ MOVE_ARG_RE = re.compile(r'(?P<x>\d+)\s+(?P<y>\d+)')
 
 
 class ConsoleController(Controller):
-    def __init__(self, field: ConsoleField, score_table: ScoreBoard):
-        super().__init__(field, score_table)
+    def __init__(self, field: ConsoleField, score_table: ScoreBoard, debug):
+        super().__init__(field, score_table, debug)
         self._funcs = {
             "move": self._cmd_move,
             "help": self._cmd_help,

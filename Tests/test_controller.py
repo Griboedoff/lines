@@ -1,4 +1,9 @@
+import os
+import sys
 from unittest import TestCase
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
 
 from Interfaces.controller import Controller
 from Model.ball import Ball
@@ -14,7 +19,8 @@ class TestController(TestCase):
         for i in field.width_r:
             field[(i, 0)] = Cell(Ball({BallColor.BROWN}))
         self.controller = Controller(field,
-                                     ScoreBoard("", {"1": 100}, 1))
+                                     ScoreBoard("", {"1": 100}, 1),
+                                     False)
 
     def test_current_score(self):
         self.assertTrue(self.controller.current_score == 0)

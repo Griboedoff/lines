@@ -6,7 +6,8 @@ from config import HINT_MODE_MULTIPLIER
 
 
 class Controller:
-    def __init__(self, field: GameField, score_table: ScoreBoard):
+    def __init__(self, field: GameField, score_table: ScoreBoard, debug):
+        self.debug = debug
         self.score_table = score_table
         self.field = field
         self._is_over = False
@@ -85,6 +86,7 @@ class Controller:
     def _generate_next_balls(self):
         self.next_balls_to_add = BallGenerator.generate_balls(
             3,
+            self.debug,
             (self.score_table.current_score > max(20 * self.min_score,
                                                   self.score_table.max_score)))
 

@@ -15,7 +15,6 @@ except Exception as e:
     sys.stderr.write('PyQt5 not found: "{}"'.format(e).encode())
     sys.exit(config.QT_NOT_FOUND)
 
-
 if __name__ == '__main__':
     parser = create_parser()
 
@@ -24,10 +23,12 @@ if __name__ == '__main__':
     game_field = GameField(parser.size)
     controller = GuiController(
         game_field,
-        ScoreBoard.load_from(parser.records, parser.hint_mode))
+        ScoreBoard.load_from(parser.records, parser.hint_mode),
+        parser.debug)
     BallGenerator.place_balls(GameField(parser.size),
                               controller,
-                              BallGenerator.generate_balls(10, False))
+                              BallGenerator.generate_balls(10, parser.debug,
+                                                           False))
 
     ex = GuiField(game_field, controller)
 

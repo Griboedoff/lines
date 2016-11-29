@@ -96,7 +96,7 @@ class GameField:
 
     def try_remove_lines(self, lines):
         if lines:
-            longest_line = max(lines, key=lambda x: len(x))
+            longest_line = max(lines, key=len)
             for coordinates in longest_line.balls:
                 self[coordinates] = Cell()
             return len(longest_line)

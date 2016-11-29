@@ -18,10 +18,12 @@ def main():
     game_field = ConsoleField(parser.size)
     controller = ConsoleController(
         game_field,
-        ScoreBoard.load_from(parser.records, parser.hint_mode))
+        ScoreBoard.load_from(parser.records, parser.hint_mode),
+        parser.debug)
     BallGenerator.place_balls(ConsoleField(parser.size),
                               controller,
-                              BallGenerator.generate_balls(10, False))
+                              BallGenerator.generate_balls(10, parser.debug,
+                                                           False))
 
     cls()
     print("""Hello there!
@@ -33,7 +35,7 @@ def main():
     while not controller.is_over:
         try:
             run_command(controller)
-        except KeyboardInterrupt or EOFError:
+        except (KeyboardInterrupt, EOFError):
             print("\nTo stop the game type 'exit'")
 
     while 1:
